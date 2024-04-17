@@ -3,12 +3,8 @@ exports.serviceDescription=
 class serviceDescription{
     constructor(page){
         this.page=page;
-        
-
+ 
     }
-
-
-
 
 //Validate the name of the service
 async validateService(elementLocator,validName){
@@ -21,13 +17,13 @@ async validateService(elementLocator,validName){
     
  }
  //Choose the service
-async selectServiceDesPage(dropDown,label,serviceLocatorDes){
-    await this.page.locator(dropDown).click();
+async selectServiceOnDesPage(serviceName){
+    await this.page.locator('[class="ng-arrow-wrapper"]').click();
     //await this.page.getByText('Application for National ID').first().click()
     //await this.page.locator(serviceLocatorDes).click();
     //await this.page.getByLabel(label).and(this.page.getByText(serviceLocatorDes)).click();
     await this.page.waitForTimeout(2000);
-    await this.page.getByRole('option', { name: 'Application for National ID' }).click()
+    await this.page.getByRole('option', { name: serviceName }).click()
     await this.page.waitForTimeout(2000);
 }
 
@@ -48,16 +44,20 @@ async validateServiceDesciption(processingTime,serviceCharge,providedBy,options1
     await expect(provider).toStrictEqual(providedBy,options1);
 
  }
+ async chooseUser(user,attachment){
+    await this.page.getByRole('combobox').click();
+    await this.page.getByText(user).click();
+    await this.page.getByText('Required attachments').click();
+    await this.page.getByText('Required attachments').click();
+    await this.page.getByText(attachment).click();  
+}
 
- //Continue the next page and validate it
-async clickAppy(role, options2,URL){
+ //Continue the next page by clicking apply
+async clickAppy(role, roleName){
 
-    await this.page.getByRole(role,options2).click();
+    await this.page.getByRole(role,{name: roleName} ).click();
     await this.page.waitForTimeout(2000);
-    // const detailsURL = this.page.url();
-    // console.log("The details url is",detailsURL)
-    // await expect(detailsURL).toContain(URL);
-
+    
  }
 
 }

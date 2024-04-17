@@ -3,9 +3,11 @@ exports.servicesPage=
 class servicesPage{
     constructor(page){
         this.page=page;
-        this.baseUrl = 'https://iremboui.uat.iremboinc.com/home/citizen/all_services';
-        //this.serviceName ="Application for National ID";
-
+        this.baseUrl = process.env.BASE_URL;
+        //this.goToLogin= 'button', { name: 'Log In' }
+        this.usernameField ='Enter phone number';
+        this.passwordfield='Enter Password'
+        this.loginButton='[type="submit"]'
     }
 
 // Open url and choose language    
@@ -29,10 +31,20 @@ async openHomePage(chooseLanguage){
 
 }
 
-//Validate the name of the service
-async validateService(elementLocator,validName){
+async login(username,password){
 
-    const serviceLocator = await this.page.locator(elementLocator);
+    await this.page.getByRole('button', { name: 'Log In' }).click()
+    await this.page.getByPlaceholder(this.usernameField).fill(username);
+    await this.page.getByPlaceholder(this.passwordfield).fill(password);
+    await this.page.locator(this.loginButton).click();
+    
+ 
+ }
+
+//Validate the name of the service
+async validateService(elementLocator,number,validName){
+
+    const serviceLocator = await this.page.getByText(elementLocator).first(number)
     console.log("locator name", serviceLocator )
     const serviceName = await serviceLocator.textContent();
     console.log("service name", serviceName );
@@ -40,9 +52,9 @@ async validateService(elementLocator,validName){
     
  }
  //Choose the service
-async selectService(elementLocator){
+async selectService(elementLocator,number){
 
-    await this.page.locator(elementLocator).click();
+    await this.page.getByText(elementLocator).first(number).click();
     
  }
 
